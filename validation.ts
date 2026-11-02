@@ -56,8 +56,15 @@ function isSave(value: unknown): boolean {
     hasIdAndDates(value) && isText(value.worldId) && isText(value.label) &&
     isNumber(value.revision) && isRecord(value.state);
 }
+function isConversationStyle(value: unknown): boolean {
+  return hasOnlyKeys(value, ['tone', 'intensity', 'replyLength']) &&
+    ['balanced', 'romantic', 'flirty', 'playful', 'bold', 'naughty', 'dark-humour', 'supportive'].includes(String(value.tone)) &&
+    isNumber(value.intensity) && Number.isInteger(value.intensity) && value.intensity >= 0 && value.intensity <= 100 &&
+    ['short', 'balanced', 'detailed'].includes(String(value.replyLength));
+}
+
 function isSettings(value: unknown): boolean {
-  if (!hasOnlyKeys(value, ['language', 'profanity', 'theme', 'reduceMotion', 'provider', 'defaultPersonaId', 'createdAt', 'updatedAt'])) return false;
+  if (!hasOnlyKeys(value, ['language', 'profanity', 'conversationStyle', 'theme', 'reduceMotion', 'provider', 'defaultPersonaId', 'createdAt', 'updatedAt'])) return false;
   const provider = value.provider;
   const providerValid = provider === null || (
     hasOnlyKeys(provider, ['providerId', 'endpoint', 'model']) && isText(provider.providerId) &&
@@ -66,6 +73,7 @@ function isSettings(value: unknown): boolean {
   );
   return ['hinglish', 'hindi', 'english'].includes(String(value.language)) &&
     ['off', 'light', 'medium', 'strong'].includes(String(value.profanity)) &&
+    (value.conversationStyle === undefined || isConversationStyle(value.conversationStyle)) &&
     ['dark', 'system'].includes(String(value.theme)) && typeof value.reduceMotion === 'boolean' &&
     (value.defaultPersonaId === undefined || isText(value.defaultPersonaId)) &&
     isNumber(value.createdAt) && isNumber(value.updatedAt) && providerValid;

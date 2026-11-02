@@ -1,4 +1,4 @@
-import type { CharacterCard, ChatMessage, Conversation, ProfanityLevel, ChatLanguage, UserPersona } from '../domain/models';
+import type { CharacterCard, ChatMessage, Conversation, ProfanityLevel, ChatLanguage, UserPersona, ConversationStyleSettings } from '../domain/models';
 
 export interface CompletionRequest {
   conversation: Conversation;
@@ -9,6 +9,7 @@ export interface CompletionRequest {
   userMessage: string;
   language: ChatLanguage;
   profanity: ProfanityLevel;
+  style: ConversationStyleSettings;
 }
 
 export interface CompletionResult {

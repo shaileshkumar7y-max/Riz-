@@ -78,7 +78,12 @@ export function getDatabase(): Promise<IDBPDatabase<RizzverseDB>> {
 export async function getSettings(): Promise<AppSettings> {
   const db = await getDatabase();
   const row = await db.get('settings', 'app');
-  if (row) return row.value;
+  if (row) return {
+    ...DEFAULT_SETTINGS,
+    ...row.value,
+    // Merge defaults so Phase 2/3 local data remains compatible after the Phase 4 update.
+    conversationStyle: { ...DEFAULT_SETTINGS.conversationStyle, ...(row.value.conversationStyle ?? {}) },
+  };
   const now = Date.now();
   const initial = { ...DEFAULT_SETTINGS, createdAt: now, updatedAt: now };
   await db.put('settings', { key: 'app', value: initial });
@@ -96,6 +101,11 @@ export async function putSettings(settings: AppSettings): Promise<void> {
   await db.put('settings', { key: 'app', value: {
     language: settings.language,
     profanity: settings.profanity,
+    conversationStyle: {
+      tone: settings.conversationStyle.tone,
+      intensity: Math.max(0, Math.min(100, Math.round(settings.conversationStyle.intensity))),
+      replyLength: settings.conversationStyle.replyLength,
+    },
     theme: settings.theme,
     reduceMotion: settings.reduceMotion,
     provider,

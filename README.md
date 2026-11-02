@@ -51,7 +51,7 @@ Without a key the app runs local preview replies so the chat interface can be te
 ## Current limits
 
 - PNG import reads standard uncompressed `tEXt` / `iTXt` Character Card metadata; compressed PNG metadata variants are not currently decoded.
-- AI requests are non-streaming in Phase 3. Streaming, richer prompt controls and advanced Hinglish personalities are Phase 4 work.
+- AI requests are non-streaming in Phase 4. Streaming and long-term memory are planned for later phases.
 - A group send causes one provider request per character (maximum six), sequentially.
 - No live AI credentials, remote image links or upstream project source files are included.
 - Full dependency-backed build, Vitest suite, Android Chrome/device test and APK packaging are pending because package installation could not complete in this environment.
@@ -61,7 +61,7 @@ Without a key the app runs local preview replies so the chat interface can be te
 1. Repository and license audit — complete.
 2. Mobile shell and local data foundation — source created; full dependency-backed build and Android verification pending.
 3. Character cards, chat engine and group chat — implementation added; full component/test/device verification pending.
-4. Hinglish personality and conversation engine.
+4. Hinglish personality and conversation engine — implemented; dependency-backed build and Android checks pending.
 5. RPG/story worlds.
 6. Memory, voice, media and plugins.
 7. Android QA, security, performance and release.
@@ -69,3 +69,16 @@ Without a key the app runs local preview replies so the chat interface can be te
 ## Upstream inspiration and license notes
 
 RIZZVERSE is an independent implementation. It does not copy source files or image assets from RisuAI, SillyTavern or Formamorph. RisuAI is the mobile character-chat architecture reference; SillyTavern is the Character Card compatibility reference; Formamorph remains a story-world design reference. Their licenses remain separate and must be reviewed before any future direct code reuse.
+
+
+## Phase 4 — Hinglish personality engine
+
+- Choose Balanced, Romantic, Flirty, Playful, Bold, Naughty (suggestive and non-graphic), Dark humour or Supportive.
+- Set vibe intensity from 0–100 and reply length (Short, Balanced or Detailed).
+- Roman Hinglish uses Latin letters by default; Hindi and English remain available.
+- Character identity, recent context, group speaker rules and consent boundaries are added to the prompt.
+- Existing Phase 2/3 local settings and backups receive safe defaults for the new fields.
+
+## GitHub Pages deployment
+
+The app must be built with Vite before GitHub Pages can serve it. Set **Settings → Pages → Build and deployment → Source → GitHub Actions**. The included workflow runs the check/test/build pipeline and deploys the generated `dist/` folder.

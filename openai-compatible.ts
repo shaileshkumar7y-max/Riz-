@@ -1,27 +1,10 @@
 import type { AIProvider, CompletionRequest, CompletionResult } from './contracts';
+import { composePersonalityPrompt } from './personality';
 
 export interface OpenAICompatibleConfig {
   endpoint: string;
   model: string;
   apiKey: string;
-}
-
-function buildSystemPrompt(request: CompletionRequest): string {
-  const groupMembers = request.characters.filter((entry) => entry.id !== request.character.id).map((entry) => entry.name);
-  const language = request.language === 'hinglish' ? 'Natural Roman Hinglish, typed in Latin letters' : request.language === 'hindi' ? 'Natural Hindi' : 'Natural English';
-  const profanity = request.profanity === 'off' ? 'Do not use profanity.' : request.profanity === 'light' ? 'Keep profanity rare and mild.' : request.profanity === 'medium' ? 'Moderate casual profanity is allowed when contextually appropriate.' : 'Strong profanity is allowed only when contextually appropriate; never target protected groups or use threats.';
-  return [
-    `You are roleplaying as ${request.character.name}, a fictional adult character (18+).`,
-    `Character description: ${request.character.description}`,
-    `Personality: ${request.character.personalityPrompt}`,
-    request.character.exampleMessages ? `Example dialogue for tone and formatting (do not copy verbatim):\n${request.character.exampleMessages}` : '',
-    `Current scenario: ${request.character.scenario}`,
-    request.persona ? `The user's roleplay persona is ${request.persona.name}: ${request.persona.description}` : '',
-    `Write in ${language}. ${profanity}`,
-    'Stay consistent with the character, respond naturally, and do not claim to be a real person.',
-    'Respect user boundaries. Do not portray minors or sexualize anyone under 18. If the user changes topic, follow the conversation naturally.',
-    groupMembers.length ? `This is a group chat. Other fictional adult participants: ${groupMembers.join(', ')}. Do not speak for them; only reply as ${request.character.name}.` : '',
-  ].filter(Boolean).join('\n\n');
 }
 
 function getMessageText(content: unknown): string {
@@ -56,12 +39,14 @@ export function createOpenAICompatibleProvider(config: OpenAICompatibleConfig): 
           : message.content;
         return { role, content };
       });
+      const intensity = Math.max(0, Math.min(100, request.style?.intensity ?? 55));
+      const replyLength = request.style?.replyLength ?? 'balanced';
       const payload = {
         model,
-        temperature: 0.85,
-        max_tokens: 700,
+        temperature: Math.min(1.05, Math.max(0.55, 0.72 + (intensity / 100) * 0.28)),
+        max_tokens: replyLength === 'short' ? 350 : replyLength === 'detailed' ? 950 : 700,
         messages: [
-          { role: 'system', content: buildSystemPrompt(request) },
+          { role: 'system', content: composePersonalityPrompt(request) },
           ...history,
         ],
       };

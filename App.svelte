@@ -336,6 +336,7 @@
             userMessage: content,
             language: settings.language,
             profanity: settings.profanity,
+            style: settings.conversationStyle,
           });
           answer = result.content;
         } else {
@@ -623,6 +624,11 @@
         <label class="setting-row"><span><strong>Chat language</strong><small>Default response language</small></span><select bind:value={settings.language}><option value="hinglish">Roman Hinglish</option><option value="hindi">Hindi</option><option value="english">English</option></select></label>
         <div class="setting-divider"></div>
         <label class="setting-row"><span><strong>Gaali intensity</strong><small>Default vocabulary preference</small></span><select bind:value={settings.profanity}><option value="off">Off</option><option value="light">Light</option><option value="medium">Medium</option><option value="strong">Strong</option></select></label>
+        <div class="setting-divider"></div>
+        <label class="setting-row"><span><strong>Conversation vibe</strong><small>Default character personality</small></span><select bind:value={settings.conversationStyle.tone}><option value="balanced">Balanced</option><option value="romantic">Romantic</option><option value="flirty">Flirty</option><option value="playful">Playful</option><option value="bold">Bold</option><option value="naughty">Naughty · non-graphic</option><option value="dark-humour">Dark humour</option><option value="supportive">Supportive</option></select></label>
+        <div class="tone-control"><div class="tone-control-heading"><strong>Vibe intensity</strong><span>{settings.conversationStyle.intensity}%</span></div><input class="tone-range" type="range" min="0" max="100" step="5" bind:value={settings.conversationStyle.intensity} aria-label="Conversation vibe intensity" /><small>Low = subtle · High = expressive, without ignoring boundaries.</small></div>
+        <div class="setting-divider"></div>
+        <label class="setting-row"><span><strong>Reply length</strong><small>How detailed should replies feel?</small></span><select bind:value={settings.conversationStyle.replyLength}><option value="short">Short</option><option value="balanced">Balanced</option><option value="detailed">Detailed</option></select></label>
         <div class="setting-divider"></div>
         <label class="setting-row"><span><strong>Appearance</strong><small>Keep the interface comfortable</small></span><select bind:value={settings.theme}><option value="dark">Dark</option><option value="system">System</option></select></label>
         <div class="setting-divider"></div>

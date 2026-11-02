@@ -122,3 +122,5 @@
   .chat-heading-main h1{font-size:19px}
 }
 @media(prefers-reduced-motion:reduce){.typing-indicator span{animation:none}}
+
+.tone-control{padding:13px 0 15px}.tone-control-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}.tone-control-heading strong{font-size:12px}.tone-control-heading span{font-size:11px;color:var(--purple);font-weight:800}.tone-range{display:block;width:100%;margin:13px 0 7px;accent-color:#a88fff;touch-action:pan-y}.tone-control>small{color:var(--muted);font-size:10px;line-height:1.5}.setting-row select{flex:0 1 160px}

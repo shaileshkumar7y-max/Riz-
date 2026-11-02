@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rizzverse-shell-v2';
+const CACHE_NAME = 'rizzverse-shell-v3';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './icon.svg', './avatars/aanya.svg', './avatars/mira.svg', './avatars/kabir.svg', './avatars/zoya.svg'];
 
 self.addEventListener('install', (event) => {

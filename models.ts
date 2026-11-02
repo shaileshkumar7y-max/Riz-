@@ -5,6 +5,14 @@ export type Id = string;
 export type ChatRole = 'user' | 'assistant' | 'system';
 export type ProfanityLevel = 'off' | 'light' | 'medium' | 'strong';
 export type ChatLanguage = 'hinglish' | 'hindi' | 'english';
+export type ConversationTone = 'balanced' | 'romantic' | 'flirty' | 'playful' | 'bold' | 'naughty' | 'dark-humour' | 'supportive';
+export type ReplyLength = 'short' | 'balanced' | 'detailed';
+
+export interface ConversationStyleSettings {
+  tone: ConversationTone;
+  intensity: number;
+  replyLength: ReplyLength;
+}
 export type ThemeMode = 'dark' | 'system';
 export type ConversationMode = 'direct' | 'group';
 
@@ -93,6 +101,7 @@ export interface ProviderPreference {
 export interface AppSettings {
   language: ChatLanguage;
   profanity: ProfanityLevel;
+  conversationStyle: ConversationStyleSettings;
   theme: ThemeMode;
   reduceMotion: boolean;
   provider: ProviderPreference | null;
@@ -129,6 +138,7 @@ export interface StorageCounts {
 export const DEFAULT_SETTINGS: AppSettings = {
   language: 'hinglish',
   profanity: 'medium',
+  conversationStyle: { tone: 'balanced', intensity: 55, replyLength: 'balanced' },
   theme: 'dark',
   reduceMotion: false,
   provider: null,
