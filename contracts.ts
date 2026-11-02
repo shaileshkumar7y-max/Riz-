@@ -1,8 +1,10 @@
-import type { CharacterCard, ChatMessage, ChatRole, Conversation, ProfanityLevel, ChatLanguage } from '../domain/models';
+import type { CharacterCard, ChatMessage, Conversation, ProfanityLevel, ChatLanguage, UserPersona } from '../domain/models';
 
 export interface CompletionRequest {
   conversation: Conversation;
   character: CharacterCard;
+  characters: CharacterCard[];
+  persona?: UserPersona;
   history: ChatMessage[];
   userMessage: string;
   language: ChatLanguage;
@@ -14,7 +16,7 @@ export interface CompletionResult {
   finishReason: 'stop' | 'length' | 'provider-error';
 }
 
-/** AI integrations implement this contract in a later phase. Secrets must not be persisted in browser storage. */
+/** AI integrations receive the session key at runtime; credentials are never stored on the provider object. */
 export interface AIProvider {
   readonly id: string;
   readonly displayName: string;
@@ -39,4 +41,4 @@ export function createProviderRegistry(): ProviderRegistry {
   };
 }
 
-export type MessageRole = ChatRole;
+export type MessageRole = ChatMessage['role'];

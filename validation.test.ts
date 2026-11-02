@@ -31,6 +31,21 @@ describe('RIZZVERSE backup validation', () => {
     expect(() => parseBackup(unsafe)).toThrow(/invalid format/i);
   });
 
+  it('rejects unknown provider fields that could smuggle a credential', () => {
+    const unsafe = structuredClone(validBackup);
+    unsafe.data.settings.provider = { providerId: 'custom', authorization: 'Bearer hidden' } as never;
+    expect(() => parseBackup(unsafe)).toThrow(/invalid format/i);
+  });
+
+  it('rejects unknown character fields before restore', () => {
+    const unsafe = structuredClone(validBackup);
+    unsafe.data.characters = [{
+      id: 'adult', name: 'A', tagline: '', description: 'Fictional adult', personalityPrompt: '', scenario: '',
+      firstMessage: 'Hi', tags: [], isAdult: true, createdAt: 1, updatedAt: 1, apiKey: 'hidden',
+    }] as never;
+    expect(() => parseBackup(unsafe)).toThrow(/invalid format/i);
+  });
+
   it('rejects conversations pointing at missing characters', () => {
     const unsafe = structuredClone(validBackup);
     unsafe.data.conversations = [{ id: 'chat-1', title: 'Chat', characterIds: ['missing'], createdAt: 1, updatedAt: 1 }] as never;

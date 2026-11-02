@@ -6,6 +6,7 @@ export type ChatRole = 'user' | 'assistant' | 'system';
 export type ProfanityLevel = 'off' | 'light' | 'medium' | 'strong';
 export type ChatLanguage = 'hinglish' | 'hindi' | 'english';
 export type ThemeMode = 'dark' | 'system';
+export type ConversationMode = 'direct' | 'group';
 
 export interface CharacterCard {
   id: Id;
@@ -15,8 +16,13 @@ export interface CharacterCard {
   personalityPrompt: string;
   scenario: string;
   firstMessage: string;
+  exampleMessages?: string;
+  alternateGreetings?: string[];
   tags: string[];
+  /** Uploaded portraits are resized raster data URLs; bundled artwork uses avatarUrl. */
   avatarDataUrl?: string;
+  avatarUrl?: string;
+  /** RIZZVERSE chats are restricted to fictional adult characters. */
   isAdult: boolean;
   createdAt: number;
   updatedAt: number;
@@ -36,6 +42,8 @@ export interface Conversation {
   title: string;
   characterIds: Id[];
   personaId?: Id;
+  /** Missing mode is treated as direct for older Phase 2 records. */
+  mode?: ConversationMode;
   createdAt: number;
   updatedAt: number;
   lastMessagePreview?: string;
@@ -47,6 +55,9 @@ export interface ChatMessage {
   role: ChatRole;
   content: string;
   status: 'complete' | 'pending' | 'error';
+  /** Set for character replies in direct and group chats. */
+  characterId?: Id;
+  characterName?: string;
   createdAt: number;
 }
 
@@ -85,6 +96,7 @@ export interface AppSettings {
   theme: ThemeMode;
   reduceMotion: boolean;
   provider: ProviderPreference | null;
+  defaultPersonaId?: Id;
   createdAt: number;
   updatedAt: number;
 }
